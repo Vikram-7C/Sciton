@@ -1,0 +1,42 @@
+/* .highlight:hover {
+    color: blue; 
+} */
+
+.container {
+    display: flex;
+}
+
+.video-column {
+    flex: 8;
+}
+
+.playlist-column {
+    flex: 2;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+li:hover {
+    background-color: #f0f0f0;
+}
+
+.highlight {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.highlight:hover {
+    color: blue;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+}

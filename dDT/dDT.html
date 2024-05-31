@@ -1,0 +1,32 @@
+<!-- <template>
+    <div class="video-container slds-m-around_medium" onclick={toggleVideo}>
+        <img src={thumbnailUrl} alt="Video Thumbnail" />
+        <iframe if:true={showVideo} src={url}> </iframe>
+    </div>
+    <div class="highlight">
+        <p>Hover over this text to see it highlighted.</p>
+    </div>
+</template> -->
+
+<template>
+    <div class="container">
+        <div class="video-column">
+            <!-- Video player -->
+            <iframe width="100%" height="100%" src={selectedVideoUrl}></iframe>
+            <div class="highlight"><p>{selectedVideoTitle}</p></div>
+        </div>
+        <div class="playlist-column">
+            <!-- List of videos -->
+            <ul>
+                <template for:each={videos} for:item="video">
+                    <li key={video.id} data-id={video.id} onclick={playVideo}>
+                        <iframe src={video.thumbnailUrl} alt={video.title}> </iframe>
+                        <div class="highlight">
+                        <p>{video.title}</p>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </div>
+</template>
