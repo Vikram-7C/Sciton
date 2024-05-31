@@ -1,0 +1,84 @@
+<template>
+	<div class="slds-grid slds-wrap">
+		<div class="slds-col slds-large-size_3-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+			<span>
+			<div class="tree-container">
+				<lightning-card title="Document Directory">
+					<div class="slds-p-around_medium lgc-bg">
+						<template if:true={filteredTreeData}>
+							<lightning-tree items={filteredTreeData} header="Document Directories"
+								onselect={handleNodeSelect}>
+							</lightning-tree>
+						</template>
+						<template if:false={filteredTreeData}>
+							No data available
+						</template>
+					</div>
+				</lightning-card>
+			</div>
+		  </span>
+		</div>
+		<div class="slds-col slds-large-size_9-of-12 slds-medium-size_8-of-12 slds-size_8-of-12">
+			<span>
+			<div class="search-container" style="padding:10px">
+				<lightning-input type="search" label="Search Document" placeholder="Search Document Name" value={searchTerm}
+					onchange={handleSearch}></lightning-input>
+			</div>
+			<div if:true={selectedNode}>
+				<div class="videos-container" style="padding:10px" if:true={showRelatedFiles}>
+					<lightning-card>
+						<lightning-tabset >
+							<!-- The below tab displays the video tutorials  -->
+        					<lightning-tab label="Tutorials" icon-name="utility:video" >
+           						<template if:true={filteredRelatedVideos}>
+									<div class="video-grid" style="padding:10px">
+										<lightning-layout multiple-rows>
+                        					<template for:each={filteredRelatedVideos} for:item="video">
+                            					<!-- <lightning-layout-item size="4" key={video.Id} class="related-video" style="padding:10px" onclick={previewVideo} data-id={video.Id}>
+													<div>
+														<iframe src={video.url} width="auto" height="auto" >
+														</iframe>
+													</div>
+													<div class="related-video-details">
+														<p>{video.ContentDocument.Title}</p>
+													</div>
+                            					</lightning-layout-item> -->
+												
+												<lightning-layout-item key={video.Id} data-id={video.Id} onclick={previewVideo} flexibility="auto, no-grow" padding="10px">
+													<div class="custom-box slds-box slds-p-around_medium slds-text-align_center">
+														<iframe src={video.url} width="auto" height="auto" ></iframe>
+															<div class="highlight">
+																<p>{video.ContentDocument.Title}</p>
+															</div>
+													</div>
+													
+												</lightning-layout-item>
+                        					</template>
+                   						 </lightning-layout>
+									</div>
+								</template>
+								<template if:false={filteredRelatedVideos}>
+									No videos found
+								</template>
+       						</lightning-tab>
+							   <!-- This below tab displays files and attachments -->
+							<lightning-tab label="Documents" icon-name="doctype:attachment">
+								<div class="file-grid" style="padding:10px">
+									<lightning-layout multiple-rows>
+										<template for:each={imageURL} for:item="item">
+											<lightning-layout-item size="2.5" key={item.id} data-id={item.id} onclick={previewFile}>
+												<img src={item.url} alt={Thumbnail} />
+												<p>{item.title}</p>
+											</lightning-layout-item>
+										</template>
+									</lightning-layout>
+								</div>
+							</lightning-tab>
+    					</lightning-tabset>
+					</lightning-card>
+				</div>
+			</div>
+		  </span>
+		</div>
+	</div>
+</template>

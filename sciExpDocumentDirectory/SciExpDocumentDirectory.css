@@ -1,0 +1,91 @@
+.container {
+    display: grid;
+}
+
+.search-container,
+.tree-container,
+.videos-container,
+.files-container {
+    padding: 1rem;
+}
+
+.card {
+    background-color: grey;
+}
+.search-container {
+    grid-column: span 6;
+}
+
+.tree-container {
+    grid-column: span 4;
+}
+
+.videos-container,
+.files-container {
+    grid-column: span 6;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    grid-gap: 8px;
+    padding: 10px;
+}
+
+.related-video {
+    text-align: center;
+}
+
+.related-video video {
+    max-width: 100%;
+    height: auto;
+}
+.files-container {
+    grid-column: span 6;
+    margin-top: 20px;
+}
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-gap: 20px;
+}
+
+.related-file {
+    cursor: pointer;
+    text-align: center;
+}
+
+.related-file img {
+    width: 100px; 
+    height: 100px; 
+    border-radius: 5px;
+}
+
+.related-file p {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.related-file:hover img {
+    opacity: 0.8;
+}
+
+.related-file img {
+    transition: opacity 0.3s ease;
+}
+
+.highlight:hover {
+    color: blue; /* Change the background color to highlight the text */
+}
+
+/* .video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+}
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+}
+ */
