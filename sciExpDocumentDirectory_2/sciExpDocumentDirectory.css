@@ -1,0 +1,80 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+ 
+.search-container,
+.tree-container,
+.videos-container,
+.files-container {
+    padding: 1rem;
+}
+.card {
+    background-color: grey;
+}
+ 
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    grid-gap: 8px;
+    padding: 10px;
+}
+ 
+.related-video {
+    text-align: center;
+}
+ 
+.related-video video {
+    max-width: 100%;
+    height: auto;
+}
+ 
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-gap: 20px;
+}
+ 
+.file-item {
+    text-align: center;
+    cursor: pointer;
+}
+ 
+.file-item img {
+    width: 100px; 
+    height: 100px; 
+    border-radius: 5px;
+    transition: opacity 0.3s ease;
+}
+ 
+.file-item p {
+    margin-top: 5px;
+    font-size: 14px;
+}
+ 
+.file-item:hover img {
+    opacity: 0.8;
+}
+ 
+.highlight {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+}
+ 
+.highlight:hover {
+    color: blue;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    }
+ 
+.video-column {
+    flex: 3;
+    padding: 50px;
+    max-width: 75%; /* Adjust the maximum width of the video column */
+}
+ 
+.playlist-column {
+    flex: 1;
+}
