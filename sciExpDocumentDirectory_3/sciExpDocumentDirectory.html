@@ -1,0 +1,90 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-large-size_3-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+            <span>
+                <div class="tree-container">
+                    <lightning-card title="Document Directory">
+                        <div class="slds-p-around_medium lgc-bg">
+                            <template if:true={filteredTreeData}>
+                                <lightning-tree items={filteredTreeData} header="Document Directories"
+                                    onselect={handleNodeSelect}>
+                                </lightning-tree>
+                            </template>
+                            <template if:false={filteredTreeData}>
+                                No data available
+                            </template>
+                        </div>
+                    </lightning-card>
+                </div>
+            </span>
+        </div>
+        <div class="slds-col slds-large-size_9-of-12 slds-medium-size_8-of-12 slds-size_8-of-12">
+            <span>
+                <div class="search-container">
+                    <lightning-input type="search" label="Search Document" placeholder="Search Document Name" value={searchTerm}
+                        onchange={handleSearch}></lightning-input>
+                </div>
+                <div if:true={selectedNode}>
+        <div class="videos-container" if:true={showRelatedFiles}>
+            <lightning-card>
+                <lightning-tabset>
+                    <lightning-tab label="Tutorials" icon-name="utility:video">
+                        <template if:true={filteredRelatedVideos}>
+                            <template if:false={selectedVideo}>
+                                <div class="video-grid">
+                                    <template for:each={filteredRelatedVideos} for:item="video">
+                                        <div key={video.Id} data-id={video.Id} onclick={playVideo}>
+                                            <div class="video-item highlight">
+                                                    <lightning-icon icon-name="doctype:mp4" size="large"></lightning-icon>
+                                                    <p>{video.ContentDocument.Title}</p>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div> 
+                            </template>
+                            <template if:true={selectedVideo}>
+                                <div class="container">
+                                    <div class="video-column">
+                                        <iframe width="100%" height="100%" src={selectedVideo.url}></iframe>
+                                        <div class="highlight"><p>{selectedVideo.ContentDocument.Title}</p></div>
+                                    </div>
+                                    <div class="playlist-column">
+                                        <ul>
+                                            <template for:each={filteredRelatedVideos} for:item="video">
+                                                <li key={video.Id} data-id={video.Id} onclick={playVideo}>
+                                                    <div class="video-item highlight">
+                                                        <div class="video-icon">
+                                                            <lightning-icon icon-name="doctype:mp4" size="large"></lightning-icon>
+                                                            <p>{video.ContentDocument.Title}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={filteredRelatedVideos}>
+                            No videos found
+                        </template>
+                    </lightning-tab>
+                    <lightning-tab label="Documents" icon-name="doctype:attachment">
+                        <div class="file-grid">
+                            <template for:each={imageURL} for:item="item">
+                                <div class="file-item highlight" key={item.id} data-id={item.id} onclick={previewFile}>
+                                    <!-- <img src={item.url} alt="Thumbnail" /> -->
+                                    <lightning-icon icon-name="doctype:image" size="large"></lightning-icon>
+                                    <p>{item.title}</p>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-tab>
+                </lightning-tabset>
+            </lightning-card>
+        </div>
+            </div>
+            </span>
+        </div>
+    </div>
+</template>
