@@ -1,0 +1,15 @@
+.slds-modal__content {
+    display: flex;
+    flex-wrap: wrap;
+}
+.field-highlight:hover {
+	font-weight: bold;
+}
+
+.slds-m-bottom_medium {
+    margin-bottom: 1rem;
+}
+
+.slds-text-align_right {
+    text-align: right;
+}
