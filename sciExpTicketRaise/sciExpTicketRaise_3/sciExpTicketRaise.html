@@ -1,0 +1,135 @@
+<template>
+    <div>
+        <!-- Ticket Raise Button -->
+        <lightning-card>
+            <div class="slds-grid slds-grid_align-spread slds-m-bottom_medium">
+                <div>
+                    <h1 class="slds-text-heading_medium" style="padding-left:10px">All Cases</h1>
+                </div>
+                <div>
+                    <lightning-button label="Raise a ticket" onclick={handleOpenModal} class="slds-m-right_small"></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+        
+        <!-- Dynamic Cases Data Table -->
+        <lightning-card title="Case Record Detail">
+            <table style="border-collapse: collapse;" class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <th scope="col" style="border: 1px solid lightGrey;">Case Number</th>
+                        <th scope="col" style="border: 1px solid lightGrey;">Subject</th>
+                        <th scope="col" style="border: 1px solid lightGrey;">Account Name</th>
+                        <th scope="col" style="border: 1px solid lightGrey;">Priority</th>
+                        <th scope="col" style="border: 1px solid lightGrey;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={paginatedCases} for:item="c">
+                        <tr key={c.Id}>
+                            <td class="caseNum" style="border: 1px solid lightGrey;" data-id={c.Id} onclick={openModal}>{c.CaseNumber}</td>
+                            <td style="border: 1px solid lightGrey;">{c.Subject}</td>
+                            <td style="border: 1px solid lightGrey;">{c.AccountName}</td>
+                            <td style="border: 1px solid lightGrey;">{c.Priority}</td>
+                            <td style="border: 1px solid lightGrey;">{c.Status}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button icon-name="utility:arrow_left" label="Prev" onclick={handlePreviousPage} disabled={isPreviousButtonDisabled} class="slds-m-right_small"></lightning-button>
+                <lightning-button icon-name="utility:arrow_right" label="Next" onclick={handleNextPage} disabled={isNextButtonDisabled}></lightning-button>
+            </div>
+        </lightning-card>
+
+        <!-- Case Creation Window -->
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Create New Case</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-edit-form object-api-name="Case" onsuccess={handleSuccess}>
+                            <div class="slds-grid slds-wrap">
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-input-field field-name="Subject"></lightning-input-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-input-field field-name="Priority"></lightning-input-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-input-field field-name="Status"></lightning-input-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-input-field field-name="Type"></lightning-input-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_2-of-2 slds-p-horizontal_x-small">
+                                    <lightning-input-field field-name="Description"></lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal} class="slds-m-right_small"></lightning-button>
+                        <lightning-button icon-name="utility:save" variant="brand" label="Save" onclick={handleSubmit}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Case Detail View Window -->
+        <template if:true={caseOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                            <lightning-icon variant="inverse" icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Case Details</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-view-form record-id={selectedCaseId} object-api-name="Case">
+                            <div class="slds-grid slds-wrap">
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="CaseNumber"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Subject"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="AccountId"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Priority"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Status"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Reason"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Type"></lightning-output-field>
+                                </div>
+                                <div class="field-highlight slds-col slds-size_2-of-2 slds-p-horizontal_x-small">
+                                    <lightning-output-field field-name="Description"></lightning-output-field>
+                                </div>
+                            </div>
+                        </lightning-record-view-form>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal} class="slds-m-right_small"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template> 
+    </div>
+</template>
