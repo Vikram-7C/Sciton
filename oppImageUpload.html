@@ -1,0 +1,43 @@
+<template>
+    <lightning-card title="Upload Image" icon-name="utility:photo">
+        <template if:true={isValidOpportunity}>
+            <lightning-layout>
+                <lightning-layout-item size="6" padding="around-small">
+                    <lightning-input type="number" label="No of Pulses" value={noOfPulses} onchange={handleFieldChange} data-field="noOfPulses" data-required="true" required></lightning-input>
+                    <lightning-input type="number" label="No of Days" value={noOfDays} onchange={handleFieldChange} data-field="noOfDays" data-required="true" required></lightning-input>
+                    <lightning-input type="date" label="Packaged Date" value={packagedDate} onchange={handleFieldChange} data-field="packagedDate" data-required="true" required></lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="6" padding="around-small">
+                    <!-- <template if:true={isDesktop}>
+                        <lightning-button label="Take Photo" class="slds-m-bottom_small" onclick={handleTakePhoto}></lightning-button>
+                    </template> -->
+                    <lightning-input type="file" accept=".png,.jpg,.jpeg,.pdf" label="Attachments" class="slds-m-bottom_small" onchange={handleFileUpload}></lightning-input>
+                    <input type="file" accept="image/*" capture="environment" class="slds-hide" onchange={handleFileChange} id="cameraInput"/>
+                    <canvas class="slds-hide canvas"></canvas>
+
+                    <template if:true={imageSrc}>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <p>Preview:</p>
+                                <img src={imageSrc} width="200" />
+                            </div>
+                        </div>
+                        <lightning-button label="Clear Image" variant="destructive" onclick={handleClear} class="slds-m-top_large"></lightning-button>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <div class="slds-modal__footer slds-align_absolute-center">
+                <lightning-button label="Save" variant="brand" onclick={handleSave} class="slds-m-right_small"></lightning-button>
+                <lightning-button label="Close" onclick={handleClose}></lightning-button>
+            </div>
+        </template>
+
+        <template if:true={showError}>
+            <div class="slds-p-around_medium slds-text-color_error slds-text-heading_small">
+                Image Upload is available only for Opportunities with Order Type is 'Upgrade' and the Stage is 'Booked'.
+            </div>
+        </template>
+    </lightning-card>
+</template>

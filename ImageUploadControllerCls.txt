@@ -1,0 +1,27 @@
+public with sharing class ImageUploadController {
+    @AuraEnabled
+    public static void saveOpportunityAndImageData(Id recordId, Integer noOfPulses, Integer noOfDays, Date packagedDate, String base64Data, String fileName) {
+        try {
+            // Update Opportunity fields
+            Opportunity opp = [SELECT Id FROM Opportunity WHERE Id = :recordId LIMIT 1];
+            opp.No_of_Pulses__c = noOfPulses;
+            opp.No_of_Days__c = noOfDays;
+            opp.Packaged_Date__c = packagedDate;
+            update opp;
+
+            // Save attachment if image is provided
+            if (!String.isEmpty(base64Data) && !String.isEmpty(fileName)) {
+                ContentVersion contentVersion = new ContentVersion();
+                contentVersion.Title = fileName;
+                contentVersion.PathOnClient = fileName;
+                contentVersion.VersionData = EncodingUtil.base64Decode(base64Data);
+                contentVersion.FirstPublishLocationId = recordId;
+                insert contentVersion;
+            }
+            
+        } catch (Exception e) {
+            system.debug( 'error =>'+e.getMessage());
+            throw new AuraHandledException('Error saving data: ' + e.getMessage());
+        }
+    }
+}

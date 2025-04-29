@@ -1,0 +1,47 @@
+@isTest
+public class ImageUploadControllerTest {
+    private static Opportunity createTestOpportunity() {
+        RecordType oppRecordType = [SELECT Id FROM RecordType WHERE SObjectType = 'Opportunity' LIMIT 1];
+
+        Opportunity opp = new Opportunity(
+            Name = 'Test Opportunity',
+            StageName = 'Prospecting',
+            CloseDate = System.today().addDays(10),
+            RecordTypeId = oppRecordType.Id
+        );
+        insert opp;
+        return opp;
+    }
+
+    @isTest
+    public static void testSaveOpportunityAndImageData() {
+        Opportunity testOpp = createTestOpportunity();
+
+        Integer noOfPulses = 10;
+        Integer noOfDays = 5;
+        Date packagedDate = Date.today();
+        String base64Image = EncodingUtil.base64Encode(Blob.valueOf('DummyImageContent'));
+        String fileName = 'TestImage.png';
+
+        Test.startTest();
+        ImageUploadController.saveOpportunityAndImageData(
+            testOpp.Id,
+            noOfPulses,
+            noOfDays,
+            packagedDate,
+            base64Image,
+            fileName
+        );
+        Test.stopTest();
+
+        Opportunity updatedOpp = [SELECT No_of_Pulses__c, No_of_Days__c, Packaged_Date__c FROM Opportunity WHERE Id =: testOpp.Id];
+        System.assertEquals(noOfPulses, updatedOpp.No_of_Pulses__c, 'No of Pulses Matched');
+        System.assertEquals(noOfDays, updatedOpp.No_of_Days__c, 'No of Days Matched');
+        System.assertEquals(packagedDate, updatedOpp.Packaged_Date__c, 'Packaged Date Matched');
+
+        List<ContentVersion> contentList = [SELECT Title, PathOnClient, FirstPublishLocationId FROM ContentVersion WHERE FirstPublishLocationId =: testOpp.Id];
+        System.assertEquals(1, contentList.size(), 'One ContentVersion Inserted');
+        System.assertEquals(fileName, contentList[0].Title, 'File name matched');
+    }
+    
+}
